@@ -32,10 +32,15 @@
                     <th scope>{{$i+1}}</th>
                     <th scope>{{$cart->product->title}}</th>
                     <td>{{$cart->product->price}}</td>
-                    <td><input type="text"></td>
-                    <td>3874</td>
+                    <td><input type="text" value="{{$cart->quantity}}" name="quantity"></td>
+                    <td>{{$cart->quantity*$cart->product->price}}</td>
                 </tr>
                 @endforeach
+                <tr>
+                    <td colspan="4"></td>
+                    <td>{{$cart->sum('quantity')}}</td>
+                    <td>{{$cart->endPrice}}</td>
+                </tr>
             </tbody>
         </table>
     @endif

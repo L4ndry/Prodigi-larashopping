@@ -6,18 +6,21 @@ use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Symfony\Component\Console\Input\Input;
 
 class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $carts=Cart::all();
         $categories=Category::all();
         $products=Product::all();
-        return view('carts.index',compact('carts','products','categories'));
+        $quantity=$request->input('quantity');
+        
+        return view('carts.index',compact('carts','products','categories','quantity'));
     }
     /**
      * Show the form for creating a new resource.
@@ -35,11 +38,15 @@ class CartController extends Controller
         $validated=$request->validate([
             'product_id' => 'required | exists:products,id',
         ]);
-       $cart =Cart::create([
+        if(Cart::where('product_id',$validated['product_id'])->exists()){
+            Cart::where('product_id',$validated['product_id'])->increment('quantity');
+        }
+       else{
+        Cart::create([
         'product_id' => $validated['product_id'],
        ]);
-       $product=$cart->product;
-       return redirect(route('carts.index'))->with('message',"Product <strong>$product->title</strong> added successfully");
+        }
+       return redirect(route('carts.index'))->with('message',"Product added successfully");
     }
 
     /**
