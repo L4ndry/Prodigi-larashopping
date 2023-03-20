@@ -35,7 +35,7 @@ class ProductSeeder extends Seeder
             "price"=> 10.99,
             "description"=> "Rose Gold Plated Double Flared Tunnel Plug Earrings. Made of 316L Stainless Steel",
             "category_id"=> 2,
-            "image"=> "https://fakestor]eapi.com/img/51UDEzMJVpL._AC_UL640_QL65_ML3_.jpg"
+            "image"=> "https://fakestoreapi.com/img/51UDEzMJVpL._AC_UL640_QL65_ML3_.jpg"
         ],
         [
             "title"=> "WD 2TB Elements Portable External Hard Drive - USB 3.0 ",
