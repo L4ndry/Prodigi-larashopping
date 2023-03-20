@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -12,9 +14,11 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
+        $carts=Cart::all();
+        $categories=Category::all();
+        $products=Product::all();
+        return view('carts.index',compact('carts','products','categories'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -28,7 +32,14 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated=$request->validate([
+            'product_id' => 'required | exists:products,id',
+        ]);
+       $cart =Cart::create([
+        'product_id' => $validated['product_id'],
+       ]);
+       $product=$cart->product;
+       return redirect(route('carts.index'))->with('message',"Product <strong>$product->title</strong> added successfully");
     }
 
     /**
@@ -60,6 +71,8 @@ class CartController extends Controller
      */
     public function destroy(Cart $cart)
     {
-        //
+        $cart->delete();
+        $product=$cart->product;
+        return redirect(route('carts.index'))->with('message',"Product <strong>$product->title</strong> deleted from cart!");
     }
 }
