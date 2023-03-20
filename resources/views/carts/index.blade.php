@@ -33,13 +33,23 @@
                     <th scope>{{$cart->product->title}}</th>
                     <td>{{$cart->product->price}}</td>
                     <td><input type="text" value="{{$cart->quantity}}" name="quantity"></td>
-                    <td>{{$cart->quantity*$cart->product->price}}</td>
+                    <td>{{$cart->totalPrice($cart->product->price,$cart->quantity)}}</td>
                 </tr>
                 @endforeach
                 <tr>
                     <td colspan="4"></td>
                     <td>{{$cart->sum('quantity')}}</td>
-                    <td>{{$cart->endPrice}}</td>
+                    <td>
+                        <?php 
+                            $total=0;
+                            ?>
+                        @foreach($carts as $cart)
+                         <?php
+                            $total += ($cart->product->price*$cart->quantity);
+                             ?>
+                        @endforeach
+                        {{$total}}
+                    </td>
                 </tr>
             </tbody>
         </table>

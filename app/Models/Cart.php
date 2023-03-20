@@ -13,4 +13,15 @@ class Cart extends Model
     public function product(){
         return $this->belongsTo(Product::class);
     } 
+    public function totalPrice($price,$quantity){
+        $total=$price*$quantity;
+        return $total;
+    }
+    public function endprice(){
+        $total=0;
+        for($i=0;$i<$this->count();$i++){
+            $total+=$this->product->price*$this->quantity;
+        }
+        return $this->belongsTo(Product::class)->$total;
+    }
 }
