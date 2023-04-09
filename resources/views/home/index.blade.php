@@ -4,7 +4,7 @@
     
 @section('content')
     <h1 class="mb-5">Prodotti in offerta</h1>
-    <div class="d-flex" style="flex-wrap: wrap">
+    <div class="d-flex justify-content-center" style="flex-wrap: wrap">
         @foreach ($products as $product)
             @include('partials.cards')
         @endforeach

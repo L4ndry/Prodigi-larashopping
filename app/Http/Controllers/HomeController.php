@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Home;
 use App\Models\Product;
@@ -15,8 +16,9 @@ class HomeController extends Controller
     public function index()
     {
         $categories=Category::all();
+        $carts=Cart::all();
         $products=Product::orderby('price')->limit(3)->get();
-        return view('home.index',compact('products','categories'));
+        return view('home.index',compact('products','categories','carts'));
     }
 
     /**

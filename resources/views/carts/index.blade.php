@@ -40,15 +40,7 @@
                     <td colspan="4"></td>
                     <td>{{$cart->sum('quantity')}}</td>
                     <td>
-                        <?php 
-                            $total=0;
-                            ?>
-                        @foreach($carts as $cart)
-                         <?php
-                            $total += ($cart->product->price*$cart->quantity);
-                             ?>
-                        @endforeach
-                        {{$total}}
+                        @include('partials.total')
                     </td>
                 </tr>
             </tbody>
