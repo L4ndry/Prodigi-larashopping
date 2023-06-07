@@ -40,7 +40,7 @@
                     <td colspan="4"></td>
                     <td>{{$cart->sum('quantity')}}</td>
                     <td>
-                        @include('partials.total')
+                        {{json_decode($total)->Total}}
                     </td>
                 </tr>
             </tbody>

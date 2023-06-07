@@ -18,9 +18,11 @@ class CartController extends Controller
         $carts=Cart::all();
         $categories=Category::all();
         $products=Product::all();
+        $total=Cart::selectRaw('sum(carts.quantity*products.price) as Total')
+                     ->join('products','carts.product_id','=','products.id')->first();
         $quantity=$request->input('quantity');
         
-        return view('carts.index',compact('carts','products','categories','quantity'));
+        return view('carts.index',compact('carts','products','categories','quantity','total'));
     }
     /**
      * Show the form for creating a new resource.

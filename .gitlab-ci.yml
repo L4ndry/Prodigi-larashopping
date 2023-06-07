@@ -1,0 +1,40 @@
+stages:
+  - build
+  - deploy
+
+
+build:
+  stage: build
+  image: 
+    name: gcr.io/kaniko-project/executor:v1.9.2-debug
+    entrypoint: [""]
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  script:
+    - echo '{"auths":{"$CI_REGISTRY":{"username":"$CI_REGISTRY_USER","password":"$CI_REGISTRY_PASSWORD"}}}' > /kaniko/.docker/config.json
+    - |-
+        /kaniko/executor \
+          --context . \
+          --dockerfile Dockerfile \
+          --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+          
+deploy-local:
+  stage: deploy
+  image: alpine
+  variables:
+    SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY
+    SSH_KNOWN_HOSTS: $SSH_KNOWN_HOSTS
+    CI_REGISTRY_PASSWORD: $CI_REGISTRY_TOKEN
+    SSH_HOST_IP: localhost
+    SSH_HOST_USER: virginia
+  before_script:
+    - apk add --no-cache openssh-client rsync
+    - mkdir -p ~/.ssh
+    - echo "$SSH_HOST_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  script:
+    - rsync -ravz --delete ./docker-compose.yml $SSH_HOST_USER@$SSH_HOST_IP:~/
+    - ssh $SSH_HOST_USER@$SSH_HOST_IP "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+    - ssh $SSH_HOST_USER@$SSH_HOST_IP "docker compose up -d --force-recreate"
+

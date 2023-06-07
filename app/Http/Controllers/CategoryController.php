@@ -41,7 +41,9 @@ class CategoryController extends Controller
         $carts = Cart::all();
         $products = Product::where('category_id', $category->id)->orderby('title')->get();
         $categories = Category::all();
-        return view('categories.show', compact('category', 'categories', 'products','carts'));
+        $total=Cart::selectRaw('sum(carts.quantity*products.price) as Total')
+                     ->join('products','carts.product_id','=','products.id')->first();
+        return view('categories.show', compact('category', 'categories', 'products','carts','total'));
     }
 
     /**

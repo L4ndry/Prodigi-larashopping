@@ -18,7 +18,9 @@ class HomeController extends Controller
         $categories=Category::all();
         $carts=Cart::all();
         $products=Product::orderby('price')->limit(3)->get();
-        return view('home.index',compact('products','categories','carts'));
+        $total=Cart::selectRaw('sum(carts.quantity*products.price) as Total')
+                     ->join('products','carts.product_id','=','products.id')->first();
+        return view('home.index',compact('products','categories','carts','total'));
     }
 
     /**

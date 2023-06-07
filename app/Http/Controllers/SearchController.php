@@ -19,7 +19,9 @@ class SearchController extends Controller
         $products=Product::where('title','LIKE',"%$request->search%")->get();
         $categories=Category::all();
         $carts=Cart::all();
-        return view('searchs.index',compact('products','categories','carts'));
+        $total=Cart::selectRaw('sum(carts.quantity*products.price) as Total')
+                     ->join('products','carts.product_id','=','products.id')->first();
+        return view('searchs.index',compact('products','categories','carts','total'));
     }
 
     /**

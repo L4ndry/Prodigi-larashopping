@@ -16,7 +16,7 @@
         @endforeach
         </ul>
         <ul class="navbar-nav mb-2 me-3 mb-lg-0">
-            <li class="nav-item me-4 nav-link">{{$carts->sum('quantity')}} items / Total:@include('partials.total')$</li>
+            <li class="nav-item me-4 nav-link">{{$carts->sum('quantity')}} items / Total:{{json_decode($total)->Total}}</li>
             <li class="nav-item"><a href="{{route('carts.index')}}" class="nav-link {{Request::path()=='carts' ?'active':''}}" aria-current="page">Cart</a></li>
         </ul>
         <form class="d-flex" action="{{route('searchs.index')}}" role="search">
